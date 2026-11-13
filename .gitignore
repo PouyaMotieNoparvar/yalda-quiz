@@ -1,0 +1,6 @@
+MCQ.txt
+Images/
+.claude/
+__pycache__/
+*.csv
+*.mp3

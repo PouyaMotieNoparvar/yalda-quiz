@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yalda Quiz — Presenter</title>
+<link rel="icon" href="assets/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,800;1,700&family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/host.css">
+</head>
+<body class="host">
+<canvas id="sky"></canvas>
+<div class="moon"></div>
+<div class="persian-border"></div>
+<div id="status" class="status-chip warn"><i></i>Starting…</div>
+
+<div class="toolbar">
+  <button class="tb" id="tb-prev" title="Back to welcome slide (←)">⟵</button>
+  <button class="tb" id="tb-full" title="Fullscreen (F)">⛶</button>
+  <button class="tb" id="tb-settings" title="Settings">⚙</button>
+</div>
+
+<main class="app">
+
+  <!-- 1. Welcome -->
+  <section id="s-welcome" class="screen">
+    <div class="welcome-frame">
+      <img src="assets/welcome.jpg" alt="Yalda Night Quiz — Iran &amp; Ireland, Geography and History. University of Galway Iranian Society">
+      <canvas id="welcome-snow"></canvas>
+    </div>
+    <div class="welcome-hint">Press <kbd>→</kbd> or click <b>Next</b> to open the join slide <button class="btn small" id="btn-to-lobby">Next ▶</button></div>
+  </section>
+
+  <!-- 2. Lobby / QR -->
+  <section id="s-lobby" class="screen">
+    <div class="lobby-left">
+      <div class="lobby-title">
+        <span class="script">Join the</span>
+        <h1 class="head">Yalda Night Quiz</h1>
+      </div>
+      <div class="qr-wrap">
+        <div class="qr-frame"><div id="qr"></div></div>
+        <div class="qr-pom" id="qr-pom"></div>
+      </div>
+      <div class="join-url">
+        <div class="muted">Scan with your phone camera, or open</div>
+        <div class="url" id="join-url"></div>
+        <div class="muted">Room code <b class="room-code" id="room-code"></b></div>
+      </div>
+    </div>
+    <div class="lobby-right card">
+      <div class="players-head">
+        <div><span class="big-count" id="player-count">0</span> <span class="muted">guests joined</span></div>
+        <div class="candles" id="candles"></div>
+      </div>
+      <div class="names" id="names"><div class="empty muted">Waiting for the first guest… ❄</div></div>
+      <div class="lobby-actions">
+        <span class="muted small-note"><span id="q-total"></span> questions · <span id="q-time"></span>s each</span>
+        <button class="btn red" id="btn-start">Start the quiz ▶</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Question + reveal -->
+  <section id="s-question" class="screen">
+    <header class="q-top">
+      <div class="q-num"><span id="q-num"></span></div>
+      <div class="seeds" id="seeds"></div>
+      <div class="timer" id="timer">
+        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" class="ring-bg"/><circle cx="50" cy="50" r="44" class="ring" id="ring"/></svg>
+        <span id="timer-num">30</span>
+      </div>
+    </header>
+    <div class="q-text card" id="q-text"></div>
+
+    <div class="q-body">
+      <div class="opts" id="opts"></div>
+      <div class="chart-area" id="chart-area" hidden>
+        <div class="chart" id="chart"></div>
+        <aside class="mini-board card" id="mini-board"></aside>
+      </div>
+    </div>
+
+    <footer class="q-foot">
+      <div class="answered"><span id="answered">0</span> / <span id="answered-of">0</span> answered</div>
+      <div class="q-actions">
+        <button class="btn ghost small" id="btn-end">End timer now</button>
+        <button class="btn red" id="btn-next" hidden>Next question ▶</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- 4. Final -->
+  <section id="s-final" class="screen">
+    <div class="final-stage" id="final-podium">
+      <h1 class="final-title"><span class="script">Yalda Night</span> <span class="head gold">Champions</span></h1>
+      <div class="podium" id="podium"></div>
+      <div class="final-next"><button class="btn" id="btn-stats">Full ranking &amp; statistics ▶</button></div>
+    </div>
+    <div class="final-stage" id="final-stats" hidden>
+      <div class="stats-left">
+        <h2 class="head">The night in numbers</h2>
+        <div class="kpis" id="kpis"></div>
+        <div class="card acc-card">
+          <div class="acc-head">Correct answers per question <span class="muted">(%)</span></div>
+          <div class="acc-chart" id="acc-chart"></div>
+          <div class="acc-notes" id="acc-notes"></div>
+        </div>
+        <div class="final-actions">
+          <button class="btn" id="btn-csv">⬇ Download results (CSV)</button>
+          <button class="btn ghost small" id="btn-csv-q">⬇ Question stats (CSV)</button>
+          <button class="btn ghost small" id="btn-back-podium">◀ Podium</button>
+          <button class="btn ghost small" id="btn-new">New game</button>
+        </div>
+      </div>
+      <div class="stats-right card">
+        <div class="rank-head head">Final ranking</div>
+        <ol class="ranking" id="ranking"></ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Settings -->
+<dialog id="dlg-settings" class="dlg">
+  <form method="dialog">
+    <h2 class="head">Settings</h2>
+    <label>Connection server
+      <select id="set-broker"></select>
+      <small class="muted">If guests can't connect, switch server (only before the quiz starts). The QR code updates automatically.</small>
+    </label>
+    <label>Seconds per question
+      <input type="number" id="set-time" min="5" max="180" step="5">
+    </label>
+    <label>Questions
+      <span class="row"><span id="set-qinfo" class="muted"></span></span>
+      <span class="row">
+        <input type="file" id="set-file" accept=".txt,text/plain" hidden>
+        <button type="button" class="btn ghost small" id="set-load">Load MCQ.txt…</button>
+        <button type="button" class="btn ghost small" id="set-reset-q">Use built-in questions</button>
+      </span>
+    </label>
+    <div class="row end">
+      <button type="button" class="btn ghost small" id="set-newgame">New game (new room)</button>
+      <button type="button" class="btn small" id="set-ok">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Resume -->
+<dialog id="dlg-resume" class="dlg">
+  <form method="dialog">
+    <h2 class="head">Resume the game?</h2>
+    <p id="resume-info" class="muted"></p>
+    <div class="row end">
+      <button type="button" class="btn ghost small" id="resume-new">Start a new game</button>
+      <button type="button" class="btn small" id="resume-yes">Resume</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/host.js"></script>
+</body>
+</html>

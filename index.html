@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070a1f">
+<title>Yalda Night Quiz</title>
+<meta name="description" content="Yalda Night Quiz — University of Galway Iranian Society">
+<link rel="icon" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,800;1,700&family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/guest.css">
+</head>
+<body class="guest">
+<canvas id="sky"></canvas>
+<div class="moon"></div>
+<div class="persian-border"></div>
+<div id="status" class="status-chip warn"><i></i>Connecting…</div>
+
+<main class="app">
+  <!-- Join -->
+  <section id="g-join" class="screen">
+    <img class="logo" src="assets/logo.jpg" alt="University of Galway Iranian Society">
+    <div class="brand"><span class="script">Yalda Night</span><span class="head gold">Quiz</span></div>
+    <p class="muted center">Iran &amp; Ireland · Geography and History</p>
+    <form id="join-form" class="card join-card" autocomplete="off">
+      <label id="room-label" hidden>Room code
+        <input id="room-input" maxlength="8" placeholder="e.g. K7QPA" autocapitalize="characters" spellcheck="false">
+      </label>
+      <label>Your name
+        <input id="name-input" maxlength="24" placeholder="Enter your name" required autocomplete="nickname" enterkeyhint="go">
+      </label>
+      <button class="btn red" id="join-btn" type="submit">Join the quiz ❄</button>
+    </form>
+  </section>
+
+  <!-- Waiting -->
+  <section id="g-wait" class="screen">
+    <div class="wait-art"><div id="wait-pom" class="float"></div></div>
+    <h1 class="head">You're in, <span class="gold" id="wait-name"></span>!</h1>
+    <p class="muted center" id="wait-msg">Get cosy — the quiz will start soon.<br>Keep this page open.</p>
+    <div class="wait-count card"><b id="wait-n">0</b> guests are here</div>
+    <p class="tiny muted center">Each question has <span id="wait-secs">30</span> seconds. Faster correct answers earn more points (up to 1000).</p>
+    <button class="link-btn" id="change-name">Change name</button>
+  </section>
+
+  <!-- Question -->
+  <section id="g-q" class="screen">
+    <div class="gq-top">
+      <span class="gq-num" id="gq-num"></span>
+      <span class="gq-time" id="gq-time">30</span>
+    </div>
+    <div class="gq-bar"><div id="gq-bar-fill"></div></div>
+    <h2 class="gq-text" id="gq-text"></h2>
+    <div class="gq-opts" id="gq-opts"></div>
+    <div class="gq-locked" id="gq-locked" hidden></div>
+  </section>
+
+  <!-- Reveal -->
+  <section id="g-r" class="screen">
+    <div class="verdict" id="verdict"></div>
+    <div class="card answer-card">
+      <div class="muted tiny">Correct answer</div>
+      <div class="right-answer" id="right-answer"></div>
+      <div class="your-answer muted" id="your-answer"></div>
+    </div>
+    <div class="score-row">
+      <div class="card stat"><div class="v" id="r-total">0</div><div class="l">total points</div></div>
+      <div class="card stat"><div class="v" id="r-rank">–</div><div class="l">your rank</div></div>
+    </div>
+    <p class="muted center tiny">Look at the big screen 👀 — the next question is coming.</p>
+  </section>
+
+  <!-- Final -->
+  <section id="g-f" class="screen">
+    <div class="final-art" id="final-art"></div>
+    <div class="brand small"><span class="script">Shab-e Yalda</span><span class="head gold">Mobarak!</span></div>
+    <div class="card final-card">
+      <div class="muted">Your final score</div>
+      <div class="final-score" id="f-score">0</div>
+      <div class="final-rank" id="f-rank"></div>
+      <div class="muted" id="f-correct"></div>
+    </div>
+    <div class="card top3" id="f-top"></div>
+    <p class="muted center tiny">Thank you for celebrating the longest night with us 🍉🍷❄</p>
+  </section>
+
+  <!-- No connection / no room -->
+  <section id="g-msg" class="screen">
+    <div id="msg-art" class="float"></div>
+    <h2 class="head" id="msg-title"></h2>
+    <p class="muted center" id="msg-text"></p>
+  </section>
+</main>
+
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/guest.js"></script>
+</body>
+</html>

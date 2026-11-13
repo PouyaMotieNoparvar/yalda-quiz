@@ -1,0 +1,137 @@
+/* ============ Yalda Night Quiz — shared theme ============ */
+:root {
+  --night-1: #070a1f;
+  --night-2: #120c2e;
+  --night-3: #2a0f2a;
+  --pom: #c8102e;
+  --pom-dark: #7a0a1f;
+  --pom-light: #ff4d6a;
+  --gold: #f2c46d;
+  --gold-dark: #b8862f;
+  --cream: #fff4e0;
+  --muted: #c9bfd6;
+  --green: #2fbf71;
+  --wrong: #e5484d;
+  --card: rgba(255, 244, 224, 0.07);
+  --card-border: rgba(242, 196, 109, 0.28);
+  /* answer option colours */
+  --opt-0: #d7263d;   /* pomegranate */
+  --opt-1: #e09f1f;   /* saffron */
+  --opt-2: #1f9bb8;   /* turquoise (firouzeh) */
+  --opt-3: #2e9e5b;   /* watermelon rind */
+  --radius: 18px;
+  --font-body: "Vazirmatn", "Segoe UI", system-ui, sans-serif;
+  --font-head: "Playfair Display", Georgia, serif;
+  --font-script: "Great Vibes", "Playfair Display", cursive;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--cream);
+  background:
+    radial-gradient(ellipse at 80% -10%, rgba(120, 60, 160, 0.35), transparent 55%),
+    radial-gradient(ellipse at 10% 110%, rgba(200, 16, 46, 0.30), transparent 55%),
+    linear-gradient(180deg, var(--night-1) 0%, var(--night-2) 55%, var(--night-3) 100%);
+  background-color: var(--night-1);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font-family: inherit; }
+
+/* ---------- sky layer ---------- */
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.moon {
+  position: fixed; top: 6vh; right: 7vw; width: 9vmin; height: 9vmin; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffbe8, #f7e3a8 55%, #d9b86a 100%);
+  box-shadow: 0 0 40px 10px rgba(255, 235, 170, 0.35), 0 0 120px 40px rgba(255, 220, 140, 0.12);
+  z-index: 0; pointer-events: none;
+  animation: moonGlow 6s ease-in-out infinite alternate;
+}
+@keyframes moonGlow { to { box-shadow: 0 0 55px 16px rgba(255, 235, 170, 0.45), 0 0 160px 60px rgba(255, 220, 140, 0.16); } }
+
+.persian-border {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 22px; z-index: 1; pointer-events: none;
+  background-color: var(--pom-dark);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22' viewBox='0 0 44 22'%3E%3Cpath d='M22 2 L32 11 L22 20 L12 11 Z' fill='none' stroke='%23f2c46d' stroke-width='1.6'/%3E%3Ccircle cx='22' cy='11' r='2.6' fill='%23f2c46d'/%3E%3Cpath d='M0 11 L6 5 M0 11 L6 17 M44 11 L38 5 M44 11 L38 17' stroke='%23f2c46d' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-size: 44px 22px;
+  border-top: 2px solid var(--gold);
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
+}
+
+.app { position: relative; z-index: 2; }
+
+/* ---------- generic ---------- */
+.screen { display: none; }
+.screen.active { display: flex; animation: screenIn 0.6s cubic-bezier(.2,.8,.2,1); }
+@keyframes screenIn { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+.script { font-family: var(--font-script); font-weight: 400; color: var(--cream); }
+.head { font-family: var(--font-head); }
+.gold { color: var(--gold); }
+.muted { color: var(--muted); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  border: 0; cursor: pointer; border-radius: 999px;
+  padding: .85em 1.8em; font-size: 1.05rem; font-weight: 700; letter-spacing: .02em;
+  color: #2a0710;
+  background: linear-gradient(180deg, #ffd98a, var(--gold) 50%, var(--gold-dark));
+  box-shadow: 0 6px 0 #7a5418, 0 12px 30px rgba(242, 196, 109, 0.3);
+  transition: transform .12s, box-shadow .12s, filter .2s;
+}
+.btn:hover { filter: brightness(1.07); }
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #7a5418, 0 6px 16px rgba(242, 196, 109, 0.25); }
+.btn:disabled { filter: grayscale(.7) brightness(.7); cursor: not-allowed; }
+.btn.red { color: var(--cream); background: linear-gradient(180deg, var(--pom-light), var(--pom) 55%, var(--pom-dark)); box-shadow: 0 6px 0 #4a0613, 0 12px 30px rgba(200, 16, 46, .35); }
+.btn.ghost { color: var(--cream); background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px var(--card-border); }
+.btn.ghost:active { transform: translateY(1px); }
+.btn.small { padding: .55em 1.1em; font-size: .9rem; }
+
+.status-chip {
+  position: fixed; top: 12px; left: 12px; z-index: 50;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .78rem; padding: 6px 12px; border-radius: 999px;
+  background: rgba(0,0,0,.45); border: 1px solid var(--card-border); color: var(--muted);
+}
+.status-chip i { width: 9px; height: 9px; border-radius: 50%; background: #888; display: inline-block; }
+.status-chip.ok i { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.status-chip.warn i { background: var(--gold); animation: blink 1s infinite; }
+.status-chip.bad i { background: var(--wrong); animation: blink .6s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+
+/* ---------- pomegranate illustration ---------- */
+.pom-svg { display: block; filter: drop-shadow(0 8px 18px rgba(200, 16, 46, .45)); }
+.float { animation: floaty 4.5s ease-in-out infinite; }
+@keyframes floaty { 50% { transform: translateY(-10px) rotate(-3deg); } }
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.06); } }
+
+/* option glyphs */
+.glyph { width: 1.6em; height: 1.6em; flex: none; display: inline-grid; place-items: center;
+  border-radius: 10px; background: rgba(0,0,0,.22); font-weight: 800; }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%) translateY(30px);
+  background: rgba(10,8,30,.92); border: 1px solid var(--card-border); color: var(--cream);
+  padding: 10px 18px; border-radius: 12px; opacity: 0; transition: .35s; z-index: 100; pointer-events: none;
+  max-width: calc(100vw - 32px); text-align: center;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; }
+
+@media (prefers-reduced-motion: reduce) {
+  .float, .pulse, .moon { animation: none !important; }
+}
