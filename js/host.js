@@ -297,9 +297,34 @@
     if (G.phase === "final" && G.finalStage === 0) return showFinalStats();
   }
 
+  /* ---------------- background music ---------------- */
+  const bgm = document.getElementById("bgm");
+  bgm.volume = 0.55;
+  bgm.loop = true; // repeat when the track ends
+  bgm.addEventListener("ended", () => { bgm.currentTime = 0; bgm.play().catch(() => {}); }); // belt and braces
+  function musicIcon() { $("#tb-music").textContent = prefs.muted ? "🔇" : "🔊"; }
+  function playMusic() {
+    if (prefs.muted) return;
+    bgm.play().catch(() => {
+      // browser blocked autoplay (e.g. after a page reload): start on the next click / key press
+      const retry = () => { if (!prefs.muted && G.phase !== "welcome" && G.phase !== "lobby") bgm.play().catch(() => {}); };
+      document.addEventListener("pointerdown", retry, { once: true });
+      document.addEventListener("keydown", retry, { once: true });
+    });
+  }
+  function toggleMusic() {
+    prefs.muted = !prefs.muted;
+    Y.store.set(PREF_KEY, prefs);
+    musicIcon();
+    if (prefs.muted) bgm.pause();
+    else if (G.phase !== "welcome" && G.phase !== "lobby") playMusic();
+  }
+
   function startQuiz() {
     if (!G.questions.length) return Y.toast("No questions loaded — open Settings.");
     if (!G.order.length && !confirm("No guests have joined yet. Start anyway?")) return;
+    bgm.currentTime = 0;
+    playMusic();
     startQuestion(0);
   }
 
@@ -477,6 +502,7 @@
   function newGame() {
     if (net && G) pub("state", null, { retain: true }); // clear the old room's retained state
     stopTicking();
+    bgm.pause(); bgm.currentTime = 0;
     G = freshGame();
     save();
     connect();
@@ -486,6 +512,7 @@
   function restore(saved) {
     G = saved;
     connect();
+    if (!["welcome", "lobby"].includes(G.phase)) playMusic();
     switch (G.phase) {
       case "welcome": show("s-welcome"); break;
       case "lobby": renderLobby(); show("s-lobby"); break;
@@ -513,6 +540,8 @@
     $("#tb-prev").onclick = () => { if (G.phase === "lobby") goWelcome(); else if (G.phase === "welcome") goLobby(); };
     $("#tb-full").onclick = toggleFull;
     $("#tb-settings").onclick = openSettings;
+    $("#tb-music").onclick = toggleMusic;
+    musicIcon();
     $("#set-ok").onclick = () => { $("#dlg-settings").close(); applySettings(); };
     $("#set-newgame").onclick = () => { if (confirm("Start a brand-new game with a new room code? Current players and scores will be cleared.")) { $("#dlg-settings").close(); newGame(); } };
     $("#set-load").onclick = () => $("#set-file").click();
@@ -534,6 +563,7 @@
       if (["ArrowRight", "PageDown", " ", "Enter"].includes(k)) { e.preventDefault(); next(); }
       else if (["ArrowLeft", "PageUp"].includes(k)) { if (G.phase === "lobby") goWelcome(); else if (G.phase === "final" && G.finalStage === 1) { G.finalStage = 0; save(); renderFinal(); } }
       else if (k === "f" || k === "F") toggleFull();
+      else if (k === "m" || k === "M") toggleMusic();
       else if ((k === "e" || k === "E") && G.phase === "question") endQuestion();
     });
     window.addEventListener("resize", () => { if (G.phase === "lobby") renderLobbyNames(); });
