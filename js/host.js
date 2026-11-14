@@ -8,7 +8,9 @@
   const Q_KEY = "yalda_custom_questions_v1";
   const GRACE_MS = 1500; // network grace after the timer hits zero
 
-  const prefs = Object.assign({ broker: 0, seconds: 30 }, Y.store.get(PREF_KEY, {}));
+  const prefs = Object.assign({ broker: 0, seconds: 10 }, Y.store.get(PREF_KEY, {}));
+  // one-time switch of any previously saved 30 s setting to the new 10 s default
+  if (!prefs.t10) { prefs.seconds = 10; prefs.t10 = true; Y.store.set(PREF_KEY, prefs); }
   const builtIn = Y.decodeQuiz(window.QUIZ_DATA);
   let questions = Y.store.get(Q_KEY) || builtIn;
 
@@ -488,7 +490,7 @@
   }
   function applySettings() {
     const b = +$("#set-broker").value;
-    const secs = Math.max(5, Math.min(180, +$("#set-time").value || 30));
+    const secs = Math.max(5, Math.min(180, +$("#set-time").value || 10));
     prefs.seconds = secs; prefs.broker = b; Y.store.set(PREF_KEY, prefs);
     if (G.phase !== "question") G.seconds = secs;
     if (["welcome", "lobby"].includes(G.phase)) {

@@ -168,7 +168,7 @@
     if (tick) return;
     const upd = () => {
       if (!state || state.ph !== "q") return stopTick();
-      const total = (state.secs || 30) * 1000;
+      const total = (state.secs || 10) * 1000;
       const left = Math.max(0, Math.min(total, state.endsAt - hostNow()));
       $("#gq-time").textContent = Math.ceil(left / 1000);
       $("#gq-time").classList.toggle("low", left <= 5000 && left > 0);

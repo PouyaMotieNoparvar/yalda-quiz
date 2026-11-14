@@ -13,7 +13,7 @@ It runs entirely on GitHub Pages, with no server to maintain.
 1. Open **host.html** on the laptop connected to the projector. Press **F** for fullscreen.
 2. **Slide 1:** the welcome image. Press **→** (or click **Next**).
 3. **Slide 2:** QR code and room code. Guests scan, type their name, and appear on screen.
-4. Click **Start the quiz**. Each question runs for **30 s** on every phone.
+4. Click **Start the quiz**. Each question runs for **10 s** on every phone (change it in ⚙ Settings).
 5. When the timer ends, phones show *Correct / Not quite*, their points and their rank.
    Your screen shows the vote chart, with the correct answer highlighted, and the Top 5.
 6. Press **→** for the next question. After the last one you get the **podium** (3rd → 2nd → 1st, with confetti).
